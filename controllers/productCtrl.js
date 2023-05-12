@@ -111,3 +111,6 @@ module.exports = {
 // 4. layered system
 // 5. cacheability
 // deployment
+// CI CD
+// automatically deploys
+
