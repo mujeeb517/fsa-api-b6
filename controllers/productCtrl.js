@@ -110,3 +110,4 @@ module.exports = {
 // 3. stateless
 // 4. layered system
 // 5. cacheability
+// deployment
