@@ -2,9 +2,22 @@ const productRepo = require('../repositories/productRepo');
 
 const get = async (req, res) => {
     try {
-        const data = await productRepo.get();
+        const page = +req.params.page || 1;
+        const size = +req.params.limit || 10;
+
+        const data = await productRepo.get(page, size);
+        const count = await productRepo.getCount();
+        const totalPages = Math.ceil(count / size);
+
+        const response = {
+            metadata: {
+                pages: totalPages,
+                count
+            },
+            data
+        };
         res.status(200);
-        res.json(data);
+        res.json(response);
     } catch (err) {
         console.log(err);
         res.status(500);
