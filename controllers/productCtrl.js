@@ -60,4 +60,12 @@ const update = async (req, res) => {
     res.send();
 };
 
-module.exports = { get, post, getById, remove, update };
+const patch = async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+    await productRepo.patch(id, data);
+    res.status(204);
+    res.send();
+}
+
+module.exports = { get, post, getById, remove, update, patch };

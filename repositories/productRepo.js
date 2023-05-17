@@ -19,4 +19,14 @@ const update = (id, data) => {
     return Product.findByIdAndUpdate(id, data);
 };
 
-module.exports = { get, add, getById, remove, update };
+const patch = async (id, data) => {
+    const dbProduct = await Product.findById(id);
+
+    for (let key in data) {
+        dbProduct[key] = data[key];
+    }
+
+    return Product.findByIdAndUpdate(id, dbProduct);
+};
+
+module.exports = { get, add, getById, remove, update, patch };
