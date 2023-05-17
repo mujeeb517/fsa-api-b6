@@ -51,4 +51,13 @@ async function remove(req, res) {
     res.send();
 }
 
-module.exports = { get, post, getById, remove };
+const update = async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+
+    await productRepo.update(id, data);
+    res.status(204);
+    res.send();
+};
+
+module.exports = { get, post, getById, remove, update };

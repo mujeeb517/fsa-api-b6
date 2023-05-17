@@ -15,4 +15,8 @@ function remove(id) {
     return Product.findByIdAndRemove({ _id: id });
 }
 
-module.exports = { get, add, getById, remove };
+const update = (id, data) => {
+    return Product.findByIdAndUpdate(id, data);
+};
+
+module.exports = { get, add, getById, remove, update };
