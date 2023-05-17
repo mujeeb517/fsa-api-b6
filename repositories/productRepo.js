@@ -11,4 +11,8 @@ const add = (data) => {
 
 const getById = id => Product.findById(id, { __v: 0 });
 
-module.exports = { get, add, getById };
+function remove(id) {
+    return Product.findByIdAndRemove({ _id: id });
+}
+
+module.exports = { get, add, getById, remove };

@@ -44,4 +44,11 @@ const post = async (req, res) => {
     }
 }
 
-module.exports = { get, post, getById };
+async function remove(req, res) {
+    const id = req.params.id;
+    await productRepo.remove(id);
+    res.status(204);
+    res.send();
+}
+
+module.exports = { get, post, getById, remove };

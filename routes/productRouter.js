@@ -7,4 +7,6 @@ router.get('/:id', productCtrl.getById);
 
 router.post('/', productCtrl.post);
 
+router.delete('/:id', productCtrl.remove);
+
 module.exports = router;
