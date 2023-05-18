@@ -1,12 +1,32 @@
 const productRepo = require('../repositories/productRepo');
 
+const isInvalid = err => err.message.indexOf('product validation failed') > -1;
+
+
 const get = async (req, res) => {
     try {
         const page = +req.params.page || 1;
         const size = +req.params.limit || 10;
 
-        const data = await productRepo.get(page, size);
-        const count = await productRepo.getCount();
+        let sort = req.query.sort || '';
+        let direction = req.query.direction || '';
+        let search = req.query.search || '';
+
+        if (!sort) {
+            sort = 'updatedDate';
+            direction = 'desc';
+        }
+
+        const options = {
+            page,
+            size,
+            sort,
+            direction,
+            search
+        };
+
+        const data = await productRepo.get(options);
+        const count = await productRepo.getCount(options);
         const totalPages = Math.ceil(count / size);
 
         const response = {
@@ -50,10 +70,16 @@ const post = async (req, res) => {
         res.status(201);
         res.json({ message: 'Created' });
     } catch (err) {
-        res.status(500);
-        res.json({
-            message: 'Internal Server Error'
-        });
+        console.log(err.message);
+        if (isInvalid(err)) {
+            res.status(400);
+            res.json(err.errors);
+        } else {
+            res.status(500);
+            res.json({
+                message: 'Internal Server Error'
+            });
+        }
     }
 }
 

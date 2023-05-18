@@ -1,17 +1,62 @@
 const Product = require('../models/productModel');
 
-const get = (page, size) => {
+
+const getSortField = (sort) => {
+    switch (sort.toLowerCase()) {
+        case 'brand':
+        case 'model':
+        case 'price':
+        case 'updatedDate':
+        case 'createdDate':
+            return sort.toLowerCase();
+        default:
+            return 'updatedDate';
+    }
+};
+
+const getDirection = (direction) => {
+    switch (direction.toLowerCase()) {
+        case 'asc':
+            return 1;
+        case 'desc':
+            return -1;
+        default:
+            return 1;
+    }
+}
+
+const get = (options) => {
+    const { page, size, sort, direction, search } = options;
     const recordsToSkip = (page - 1) * size;
-    return Product.find({}, { __v: 0 })
+    const sortField = getSortField(sort);
+    const dir = getDirection(direction);
+
+    const filter = {
+        $or: [
+            { brand: new RegExp(search, 'i') },
+            { model: new RegExp(search, 'i') }
+        ]
+    };
+
+    return Product.find(filter, { __v: 0 })
+        .sort({ [sortField]: dir })
         .skip(recordsToSkip)
         .limit(size);
 };
 
-const getCount = () => {
-    return Product.count();
+const getCount = (options) => {
+    const { search } = options;
+    const filter = {
+        $or: [
+            { brand: new RegExp(search, 'i') },
+            { model: new RegExp(search, 'i') }
+        ]
+    };
+    return Product.count(filter);
 };
 
 const add = (data) => {
+    data.createdDate = new Date();
     const product = new Product(data);
     return product.save();
 };
