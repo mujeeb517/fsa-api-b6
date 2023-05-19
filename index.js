@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { notFound } = require('./controllers/defaultCtrl');
 const defaultRouter = require('./routes/defaultRouter');
 const productRouter = require('./routes/productRouter');
+const userRouter = require('./routes/userRouter');
 
 const app = express();
 // layered architecture
@@ -26,5 +27,6 @@ console.log('db connected');
 // register router
 app.use('/', defaultRouter);
 app.use('/api/products', productRouter);
+app.use('/api/users', userRouter);
 
 app.get('*', notFound);
