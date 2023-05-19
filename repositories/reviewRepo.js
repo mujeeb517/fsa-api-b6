@@ -5,4 +5,6 @@ const create = data => {
     return review.save();
 }
 
-module.exports = { create };
+const get = id => Review.find({ productId: id }, { __v: 0, productId: 0 });
+
+module.exports = { create, get };

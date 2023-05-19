@@ -1,4 +1,5 @@
 const productRepo = require('../repositories/productRepo');
+const reviewRepo = require('../repositories/reviewRepo');
 
 const isInvalid = err => err.message.indexOf('product validation failed') > -1;
 
@@ -50,13 +51,19 @@ const getById = async (req, res) => {
         const id = req.params.id;
         const product = await productRepo.getById(id);
         if (product) {
+            const reviews = await reviewRepo.get(id);
+            const response = {
+                ...product._doc,
+                reviews
+            };
             res.status(200);
-            res.json(product);
+            res.json(response);
         } else {
             res.status(404);
             res.json({ message: 'Not found' });
         }
     } catch (err) {
+        console.error(err);
         res.status(500);
         res.json({
             message: 'Internal Server Error'
