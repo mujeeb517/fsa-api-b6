@@ -1,5 +1,6 @@
 const userRepo = require('../repositories/userRepo');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const signup = async (req, res) => {
     try {
@@ -17,4 +18,30 @@ const signup = async (req, res) => {
     }
 };
 
-module.exports = { signup };
+const signin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const dbUser = await userRepo.getUserByEmail(email);
+        if (!dbUser) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const result = await bcrypt.compare(password, dbUser.password);
+        if (result) {
+            const payload = {
+                firstName: dbUser.firstName,
+                lastName: dbUser.lastName,
+                email: dbUser.email
+            };
+            const token = jwt.sign(payload, 'secret', {});
+            res.status(200).json({ token });
+        } else {
+            res.status(401).json({ message: 'Unauthorized' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+module.exports = { signup, signin };
