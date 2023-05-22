@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     active: { type: Boolean, default: true },
+    role: { type: Number, default: 1 },
     createdDate: Date,
     updatedDate: { type: Date, default: Date.now }
 });

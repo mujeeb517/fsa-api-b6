@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const signup = async (req, res) => {
     try {
+        // forcefully make role User
+        req.body.role = 1;
         req.body.password = await bcrypt.hash(req.body.password, 1);
         await userRepo.signup(req.body);
         res.status(201).json({ message: 'Created' });
@@ -31,9 +33,10 @@ const signin = async (req, res) => {
             const payload = {
                 firstName: dbUser.firstName,
                 lastName: dbUser.lastName,
-                email: dbUser.email
+                email: dbUser.email,
+                role: dbUser.role
             };
-            const token = jwt.sign(payload, 'secret', {});
+            const token = jwt.sign(payload, process.env.jwtSecret, {});
             res.status(200).json({ token });
         } else {
             res.status(401).json({ message: 'Unauthorized' });
