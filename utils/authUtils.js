@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { userEnum } = require('./enums');
 
 async function authenticate(req, res, next) {
     try {
@@ -23,7 +24,7 @@ async function authenticate(req, res, next) {
 }
 
 function authorizeAdmin(req, res, next) {
-    if (req.role === 2) {
+    if (req.role === userEnum.Admin) {
         next();
     } else {
         res.status(403).json({ message: 'Forbidden' });

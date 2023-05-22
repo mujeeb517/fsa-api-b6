@@ -1,11 +1,11 @@
 const userRepo = require('../repositories/userRepo');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { userEnum } = require('../utils/enums');
 
 const signup = async (req, res) => {
     try {
-        // forcefully make role User
-        req.body.role = 1;
+        req.body.role = userEnum.User;
         req.body.password = await bcrypt.hash(req.body.password, 1);
         await userRepo.signup(req.body);
         res.status(201).json({ message: 'Created' });
