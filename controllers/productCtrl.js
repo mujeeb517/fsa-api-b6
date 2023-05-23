@@ -120,3 +120,4 @@ const patch = async (req, res) => {
 }
 
 module.exports = { get, post, getById, remove, update, patch };
+
