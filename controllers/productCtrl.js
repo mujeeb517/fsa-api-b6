@@ -1,11 +1,12 @@
 const productRepo = require('../repositories/productRepo');
 const reviewRepo = require('../repositories/reviewRepo');
+const logger = require('../utils/logger');
 
 const isInvalid = err => err.message.indexOf('product validation failed') > -1;
 
-
 const get = async (req, res) => {
     try {
+        logger.info('processing a request');
         const page = +req.params.page || 1;
         const size = +req.params.limit || 10;
 
@@ -27,8 +28,11 @@ const get = async (req, res) => {
         };
 
         const data = await productRepo.get(options);
+        logger.info('fetched the data');
         const count = await productRepo.getCount(options);
         const totalPages = Math.ceil(count / size);
+
+        logger.info('preparing response');
 
         const response = {
             metadata: {
@@ -40,7 +44,7 @@ const get = async (req, res) => {
         res.status(200);
         res.json(response);
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500);
         res.json({ message: 'Internal Server Error' });
     }
@@ -68,7 +72,7 @@ const getById = async (req, res) => {
             res.json({ message: 'Not found' });
         }
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         res.status(500);
         res.json({
             message: 'Internal Server Error'
@@ -76,13 +80,14 @@ const getById = async (req, res) => {
     }
 };
 
+
 const post = async (req, res) => {
     try {
         await productRepo.add(req.body);
         res.status(201);
         res.json({ message: 'Created' });
     } catch (err) {
-        console.log(err.message);
+        logger.error(err.message);
         if (isInvalid(err)) {
             res.status(400);
             res.json(err.errors);

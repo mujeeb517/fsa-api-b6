@@ -9,6 +9,10 @@ const fs = require('fs');
 
 const app = express();
 
+if (!fs.existsSync('logs')) {
+    fs.mkdirSync('logs');
+}
+
 const requestLogFile = fs.createWriteStream('./logs/request.log',
     { flags: 'a' });
 
