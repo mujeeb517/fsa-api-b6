@@ -52,9 +52,14 @@ const getById = async (req, res) => {
         const product = await productRepo.getById(id);
         if (product) {
             const reviews = await reviewRepo.get(id);
+            const avgRatingRes = await reviewRepo.getAvgRating(id);
+            const avgRating = avgRatingRes && avgRatingRes.length > 0
+                ? avgRatingRes[0].avgRating
+                : undefined;
             const response = {
                 ...product._doc,
-                reviews
+                avgRating,
+                reviews,
             };
             res.status(200);
             res.json(response);
