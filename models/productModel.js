@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     inStock: { type: Boolean, default: false },
     discount: { type: Number, default: 0 },
     createdDate: Date,
+    image: String,
     updatedDate: { type: Date, default: Date.now }
 });
 
