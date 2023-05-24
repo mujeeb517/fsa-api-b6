@@ -28,18 +28,23 @@ const get = async (req, res) => {
         };
 
         const data = await productRepo.get(options);
-        logger.info('fetched the data');
+
+        const transformedData = data.map(item => {
+            return {
+                ...item._doc,
+                image: item._doc.image ? `${req.protocol}://${req.get('host')}/${item._doc.image}` : undefined
+            }
+        });
+
         const count = await productRepo.getCount(options);
         const totalPages = Math.ceil(count / size);
-
-        logger.info('preparing response');
 
         const response = {
             metadata: {
                 pages: totalPages,
                 count
             },
-            data
+            data: transformedData
         };
         res.status(200);
         res.json(response);
@@ -54,6 +59,7 @@ const getById = async (req, res) => {
     try {
         const id = req.params.id;
         const product = await productRepo.getById(id);
+        product.image = product.image ? `${req.protocol}://${req.get('host')}/${product.image}` : undefined;
         if (product) {
             const reviews = await reviewRepo.get(id);
             const avgRatingRes = await reviewRepo.getAvgRating(id);

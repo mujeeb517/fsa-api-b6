@@ -20,6 +20,7 @@ app.use(morgan('combined', { stream: requestLogFile }));
 app.use(morgan('dev'));
 
 app.use(express.json());
+app.use(express.static('uploads/'));
 
 const PORT = process.env.PORT || 3002;
 
@@ -28,6 +29,8 @@ app.listen(PORT, () => console.log(`server is running on ${PORT}`));
 const connectionStr = 'mongodb://127.0.0.1:27017/fsa-b6';
 mongoose.connect(connectionStr);
 console.log('db connected');
+
+
 
 
 app.use('/', defaultRouter);
