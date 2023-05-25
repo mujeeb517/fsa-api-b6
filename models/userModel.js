@@ -4,7 +4,15 @@ const schema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        unique: true
+        unique: true,
+        validate: {
+            validator: function (val) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val);
+            },
+            message: function (item) {
+                return `${item.value} is not valid email`;
+            }
+        }
     },
     password: { type: String, required: true },
     firstName: { type: String, required: true },
