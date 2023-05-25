@@ -6,6 +6,7 @@ const productRouter = require('./routes/productRouter');
 const userRouter = require('./routes/userRouter');
 const morgan = require('morgan');
 const fs = require('fs');
+const authUtils = require('./utils/authUtils');
 
 const app = express();
 
