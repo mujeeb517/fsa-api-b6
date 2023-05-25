@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 3002;
 
 app.listen(PORT, () => console.log(`server is running on ${PORT}`));
 
-const connectionStr = 'mongodb://127.0.0.1:27017/fsa-b6';
+const connectionStr = process.env.dbConStr;
 mongoose.connect(connectionStr);
 console.log('db connected');
 
