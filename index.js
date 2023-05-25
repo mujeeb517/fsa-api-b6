@@ -7,6 +7,7 @@ const userRouter = require('./routes/userRouter');
 const morgan = require('morgan');
 const fs = require('fs');
 const authUtils = require('./utils/authUtils');
+const cors = require('cors');
 
 const app = express();
 
@@ -20,6 +21,7 @@ const requestLogFile = fs.createWriteStream('./logs/request.log',
 app.use(morgan('combined', { stream: requestLogFile }));
 app.use(morgan('dev'));
 
+app.use(cors());
 app.use(express.json());
 app.use(express.static('uploads/'));
 
