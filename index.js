@@ -36,7 +36,7 @@ console.log('db connected');
 app.use('/', defaultRouter);
 app.use('/api/users', userRouter);
 
-// app.use(authUtils.authenticate);
+app.use(authUtils.authenticate);
 
 app.use('/api/products', productRouter);
 
